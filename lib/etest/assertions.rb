@@ -45,6 +45,7 @@ module Etest::Assertions
   #
   #
   def assert_valid_xml(*args)
+    return unless libxml_installed?
     args.push @response.body if args.empty?
     
     args.each do |xml|
@@ -52,8 +53,27 @@ module Etest::Assertions
     end
   end
 
+  def assert_invalid_xml(*args)
+    return unless libxml_installed?
+    args.push @response.body if args.empty?
+    
+    args.each do |xml|
+      assert !xml_valid?(xml), "XML should not be valid: #{xml}"
+    end
+  end
+
+  def libxml_installed?
+    return @libxml_installed unless @libxml_installed.nil?
+    @libxml_installed = begin
+      require "libxml"
+      true
+    rescue LoadError
+      STDERR.puts "*** Skipping xml_validation. Please install the 'libxml' gem"
+      false
+    end
+  end
+  
   def xml_valid?(xml)
-    require "libxml"
     LibXML::XML::Error.reset_handler
     
     LibXML::XML::Document.io StringIO.new(xml)
@@ -62,27 +82,44 @@ module Etest::Assertions
     false
   end
   
-  def assert_invalid_xml(*args)
-    args.push @response.body if args.empty?
-    
-    args.each do |xml|
-      assert !xml_valid?(xml), "XML should not be valid: #{xml}"
-    end
-  end
-
   def assert_route(uri_path, params)
     assert_recognizes params, uri_path
   end
 
-  def assert_raises_kind_of(klass, &block)
-    begin
-      yield
+  def catch_exception_on(&block)
+    yield
+    nil
+  rescue Exception
+    $!
+  end
+  
+  def assert_raise(klass, &block)
+    ex = catch_exception_on(&block)
+    if ex.nil?
       assert false, "Should raise a #{klass} exception, but didn't raise at all"
-    rescue klass
-      assert $!.is_a?(klass), "Should raise a #{klass} exception, but raised a #{$!.class.name} exception"
+    else
+      assert ex.class.name == klass.name, "Should raise a #{klass} exception, but raised a #{ex.class.name} exception"
     end
   end
   
+  def assert_nothing_raised(&block)
+    ex = catch_exception_on(&block)
+    assert ex.nil?, "Should not raise an exception, but raised a #{ex.class.name} exception"
+  end
+  
+  def assert_raises_kind_of(klass, &block)
+    ex = catch_exception_on(&block)
+    if ex.nil?
+      assert false, "Should raise a #{klass} exception, but didn't raise at all"
+    else
+      assert ex.is_a?(klass), "Should raise a #{klass} exception, but raised a #{ex.class.name} exception"
+    end
+  end
+  
+  def assert_not_nil(v)
+    assert !v.nil?, "Should be nil, but is an #{v.class.name} object"
+  end
+
   def assert_file_exist(*paths)
     paths.flatten.each do |path|
       assert File.exist?(path), "Missing file #{path}"

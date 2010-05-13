@@ -20,6 +20,7 @@ RAILS_ENV="test"
 RAILS_ROOT="#{DIRNAME}"
 
 if !defined?(RAILS_DEFAULT_LOGGER)
+  require "fileutils"
   FileUtils.mkdir_p File.dirname(LOGFILE)
   RAILS_DEFAULT_LOGGER = Logger.new(LOGFILE)
   RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
