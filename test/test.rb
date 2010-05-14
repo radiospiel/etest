@@ -5,7 +5,9 @@ Dir.chdir(DIRNAME)
 #
 # initialize the gem
 require '../init'
+
 require "#{DIRNAME}/etest_assertions.rb"
+require "#{DIRNAME}/etest_string.rb"
 
 require 'logger'
 require 'rubygems'
