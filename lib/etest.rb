@@ -4,8 +4,6 @@ require File.dirname(__FILE__) + "/string_ext"
 require File.dirname(__FILE__) + "/module_ext"
 require File.dirname(__FILE__) + "/dlog_ext"
 
-STDERR.puts "** Loading etest"
-
 #
 # Embedded test cases:
 #

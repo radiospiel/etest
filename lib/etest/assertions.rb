@@ -2,6 +2,10 @@
 #
 # Some assertions
 module Etest::Assertions
+  def assert_not_equal(unexpected, actual)
+    assert unexpected != actual, "#{actual} equals #{unexpected}, when it shouldn't"
+  end
+    
   def assert_respond_to(obj, *args)
     raise ArgumentError, "Missing argument(s)" if args.length < 1
   
@@ -123,6 +127,12 @@ module Etest::Assertions
   def assert_file_exist(*paths)
     paths.flatten.each do |path|
       assert File.exist?(path), "Missing file #{path}"
+    end
+  end
+
+  def assert_file_doesnt_exist(*paths)
+    paths.flatten.each do |path|
+      assert !File.exist?(path), "File #{path} shouldn't exist."
     end
   end
 end
