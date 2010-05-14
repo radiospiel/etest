@@ -4,6 +4,8 @@ require File.dirname(__FILE__) + "/string_ext"
 require File.dirname(__FILE__) + "/module_ext"
 require File.dirname(__FILE__) + "/dlog_ext"
 
+STDERR.puts "** Loading etest"
+
 #
 # Embedded test cases:
 #
@@ -28,6 +30,10 @@ class MiniTest::Unit::TestCase
 end
 
 module Etest
+  def self.autorun
+    auto_run
+  end
+  
   def self.auto_run
     #
     # find all modules that are not named /::Etest$/, and try to load
@@ -64,3 +70,4 @@ module Etest
     klass
   end
 end
+
