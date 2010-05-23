@@ -13,4 +13,6 @@ lib/string_ext.rb
 script/console
 script/rebuild
 tasks/echoe.rake
+test/etest_assertions.rb
+test/etest_string.rb
 test/test.rb

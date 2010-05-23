@@ -1,5 +1,12 @@
 require "rubygems"
-require "minitest/unit"
+
+begin
+  require "minitest-rg"
+rescue LoadError
+  STDERR.puts "'gem install minitest-rg' gives you redgreen minitests."
+  require "minitest/unit"
+end
+
 require File.dirname(__FILE__) + "/string_ext"
 require File.dirname(__FILE__) + "/module_ext"
 require File.dirname(__FILE__) + "/dlog_ext"
