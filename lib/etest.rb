@@ -39,6 +39,10 @@ module Etest
   end
   
   def self.autorun
+    auto_run
+  end
+  
+  def self.auto_run
     #
     # find all modules that are not named /::Etest$/, and try to load
     # the respective Etest module.
@@ -76,3 +80,4 @@ module Etest
     klass
   end
 end
+

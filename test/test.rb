@@ -8,6 +8,9 @@ ETEST_TEST=true
 # initialize the gem
 require '../init'
 
+require "#{DIRNAME}/etest_assertions.rb"
+require "#{DIRNAME}/etest_string.rb"
+
 require 'logger'
 require 'rubygems'
 require 'ruby-debug'
@@ -22,6 +25,7 @@ RAILS_ENV="test"
 RAILS_ROOT="#{DIRNAME}"
 
 if !defined?(RAILS_DEFAULT_LOGGER)
+  require "fileutils"
   FileUtils.mkdir_p File.dirname(LOGFILE)
   RAILS_DEFAULT_LOGGER = Logger.new(LOGFILE)
   RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
