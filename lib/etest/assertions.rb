@@ -74,47 +74,88 @@ module Etest::Assertions
     assert_recognizes params, uri_path
   end
 
-  def assert_raises_kind_of(klass, &block)
+  def assert_raise(klass, msg=nil)
     begin
       yield
-      assert false, "Should raise a #{klass} exception, but didn't raise at all"
+      assert false, msg || "Should raise a #{klass} exception, but didn't raise at all"
     rescue klass
-      assert $!.is_a?(klass), "Should raise a #{klass} exception, but raised a #{$!.class.name} exception"
+      assert $!.class == klass, msg || "Should raise a #{klass} exception, but raised a #{$!.class.name} exception"
+    end
+  end
+  
+  def assert_raises_kind_of(klass, msg = nil, &block)
+    begin
+      yield
+      assert false, msg || "Should raise a #{klass} exception, but didn't raise at all"
+    rescue klass
+      assert $!.is_a?(klass), msg || "Should raise a #{klass} exception, but raised a #{$!.class.name} exception"
+    end
+  end
+
+  def assert_nothing_raised(msg=nil)
+    begin
+      yield
+      assert true
+    rescue
+      assert false, "Unexpected #{$!.class} exception: #{$!}"
     end
   end
   
   def assert_file_exist(*paths)
     paths.flatten.each do |path|
-      assert File.exist?(path), "Missing file #{path}"
+      assert File.exist?(path), "Missing file: #{path}"
     end
+  end
+  
+  def assert_file_doesnt_exist(*paths)
+    paths.flatten.each do |path|
+      assert !File.exist?(path), "File should not exist: #{path}"
+    end
+  end
+  
+  def assert_not_equal(unexpected, actual)
+    assert unexpected != actual, "#{actual.inspect} should be != #{unexpected.inspect}"
+  end
+
+  def assert_not_nil(actual)
+    assert !actual.nil?, "#{actual.inspect} should not be nil"
+  end
+
+  def assert_nil(actual)
+    assert actual.nil?, "#{actual.inspect} should be nil"
   end
 end
 
+class MiniTest::Unit::TestCase
+  include Etest::Assertions
+end
 
-module Etest::Assertions::Etest
-  #
-  # this actually tests the existance of an assertion and one successful
-  # assertion, nothing less, and nothing more...
-  def test_asserts
-    assert_respond_to "nsn", :upcase
-    assert respond_to?(:assert_invalid)
-    assert respond_to?(:assert_valid)
-  end
+unless defined?(ETEST_TEST)
 
-  class TestError < RuntimeError; end
-  
-  def test_assert_raises_kind_of
-    assert_raises_kind_of RuntimeError do 
-      raise TestError
+  module Etest::Assertions::Etest
+    #
+    # this actually tests the existance of an assertion and one successful
+    # assertion, nothing less, and nothing more...
+    def test_asserts
+      assert_respond_to "nsn", :upcase
+      assert respond_to?(:assert_invalid)
+      assert respond_to?(:assert_valid)
     end
-  end
+
+    class TestError < RuntimeError; end
+
+    def test_assert_raises_kind_of
+      assert_raises_kind_of RuntimeError do 
+        raise TestError
+      end
+    end
+
+    def test_assert_file_exist
+      assert_file_exist __FILE__
+    end
   
-  def test_assert_file_exist
-    assert_file_exist __FILE__
-  end
-  
-  def test_xml
-    assert_valid_xml <<-XML
+    def test_xml
+      assert_valid_xml <<-XML
 <root>
 <p> lkhj </p>
 </root>
@@ -124,5 +165,8 @@ XML
 <root>
 <p> lkhj </p>
 XML
+    end
   end
+
 end
+

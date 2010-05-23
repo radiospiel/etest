@@ -10,25 +10,35 @@ require File.dirname(__FILE__) + "/dlog_ext"
 # The Etest module contains methods to run etests.
 # 
 module Etest
+  VERSION=File.read(File.dirname(__FILE__) + "/../VERSION")
 end
 
 require File.dirname(__FILE__) + "/etest/assertions"
+require File.dirname(__FILE__) + "/etest/comparison_assertions"
 
 class MiniTest::Unit::TestCase
   def self.run_etests(*test_cases)
+    outside_etests = @@test_suites
+    reset
+    
     MiniTest::Unit::TestCase.reset
     
     test_cases.each do |test_case|
       MiniTest::Unit::TestCase.inherited test_case
     end
 
-    MiniTest::Unit.new.run([])
-    MiniTest::Unit::TestCase.reset
+    MiniTest::Unit.new.run(ARGV.dup)
+  ensure
+    @@test_suites = outside_etests
   end
 end
 
 module Etest
-  def self.auto_run
+  
+  class TestCase < MiniTest::Unit::TestCase
+  end
+  
+  def self.autorun
     #
     # find all modules that are not named /::Etest$/, and try to load
     # the respective Etest module.
@@ -56,11 +66,13 @@ module Etest
   #
   # convert an Etest moodule into a MiniTest testcase
   def self.to_test_case(mod)
-    klass = Class.new MiniTest::Unit::TestCase
+    klass = Class.new TestCase
     klass.send :include, mod
     klass.send :include, Assertions
 
-    mod.const_set("TestCase", klass)
+    Kernel.silent do
+      mod.const_set("TestCase", klass)
+    end
     klass
   end
 end

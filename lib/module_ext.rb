@@ -1,3 +1,12 @@
+module Kernel
+  def self.silent(&block)
+    old_verbose, $VERBOSE = $VERBOSE, nil
+    yield
+  ensure
+    $VERBOSE = old_verbose
+  end
+end
+
 # 
 # TDD helpers for modules. 
 class Module
@@ -19,14 +28,12 @@ class Module
   #
   # load a module by name. 
   def self.by_name(name)                                  #:nodoc:
-    old_verbose, $VERBOSE = $VERBOSE, nil
-    
-    r = eval(name, nil, __FILE__, __LINE__)
-    r if r.is_a?(Module) && r.name == name
+    Kernel.silent do
+      r = eval(name, nil, __FILE__, __LINE__)
+      r if r.is_a?(Module) && r.name == name
+    end
   rescue NameError, LoadError
     nil
-  ensure
-    $VERBOSE = old_verbose
   end
   
   #

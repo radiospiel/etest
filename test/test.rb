@@ -2,6 +2,8 @@
 DIRNAME = File.expand_path File.dirname(__FILE__)
 Dir.chdir(DIRNAME)
 
+ETEST_TEST=true
+
 #
 # initialize the gem
 require '../init'
@@ -46,7 +48,7 @@ end
 
 $etests_did_run = false
 Etest.reload
-Etest.auto_run
+Etest.autorun
 
 unless $etests_did_run
   STDERR.puts "Something's wrong with etests :(" 
