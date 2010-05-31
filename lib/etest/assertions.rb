@@ -2,6 +2,19 @@
 #
 # Some assertions
 module Etest::Assertions
+  #
+  # regex matching
+  #
+  def assert_matches(actual, pattern)
+    assert actual =~ pattern, "#{actual.truncate(32).inspect} should match #{pattern.inspect}, but doesn't."
+  end
+
+  def assert_no_match(actual, pattern)
+    return unless actual =~ pattern
+    assert actual !~ pattern, "#{actual.truncate(32).inspect} should not match #{pattern.inspect}, but does."
+  end
+  
+  #
   def assert_not_equal(unexpected, actual)
     assert unexpected != actual, "#{actual} equals #{unexpected}, when it shouldn't"
   end
