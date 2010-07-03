@@ -19,6 +19,10 @@ module Etest::Assertions
     assert unexpected != actual, "#{actual} equals #{unexpected}, when it shouldn't"
   end
     
+  def assert_equal(expected, actual)
+    assert expected == actual, "Expected\n\n\t#{expected.inspect}\n\ninstead of\n\n\t#{actual.inspect}"    
+  end
+    
   def assert_respond_to(obj, *args)
     raise ArgumentError, "Missing argument(s)" if args.length < 1
   
