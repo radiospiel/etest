@@ -1,4 +1,5 @@
 require "rubygems"
+require "dlog"
 
 begin
   require "minitest-rg"
