@@ -13,7 +13,7 @@ class String
   end
 end
 
-unless defined?(TEST_ETEST)
+if defined?(ETEST_TEST)
   
   module String::Etest
     def test_camelize

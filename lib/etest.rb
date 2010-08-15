@@ -10,7 +10,6 @@ end
 
 require File.dirname(__FILE__) + "/string_ext"
 require File.dirname(__FILE__) + "/module_ext"
-require File.dirname(__FILE__) + "/dlog_ext"
 
 #
 # Embedded test cases:
@@ -18,7 +17,6 @@ require File.dirname(__FILE__) + "/dlog_ext"
 # The Etest module contains methods to run etests.
 # 
 module Etest
-  VERSION=File.read(File.dirname(__FILE__) + "/../VERSION")
 end
 
 require File.dirname(__FILE__) + "/etest/assertions"

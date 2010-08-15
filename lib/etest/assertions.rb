@@ -170,7 +170,7 @@ class MiniTest::Unit::TestCase
   include Etest::Assertions
 end
 
-unless defined?(ETEST_TEST)
+if defined?(ETEST_TEST)
 
   module Etest::Assertions::Etest
     #

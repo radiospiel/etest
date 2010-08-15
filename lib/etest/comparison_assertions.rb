@@ -30,7 +30,7 @@ class MiniTest::Unit::TestCase
   include ::Etest::ComparisonAssertions
 end
 
-unless defined?(ETEST_TEST)
+if defined?(ETEST_TEST)
 
   module Etest::ComparisonAssertions::Etest
     # I don't know how to test asserts. This, at least, give (fake) C0 coverage
