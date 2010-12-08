@@ -25,6 +25,12 @@ require File.dirname(__FILE__) + "/etest/comparison_assertions"
 class MiniTest::Unit::TestCase
   def self.run_etests(*test_cases)
     outside_etests = @@test_suites
+
+    if test_cases.empty?
+      dlog.warn "Found no etest test_cases"
+      return
+    end
+
     reset
     
     MiniTest::Unit::TestCase.reset
