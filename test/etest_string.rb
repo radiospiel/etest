@@ -1,4 +1,3 @@
-
 module String::Etest
   def test_camelize
     assert_equal "x", "X".underscore
@@ -10,4 +9,3 @@ module String::Etest
     assert_equal "XaLaNder", "xa_la_nder".camelize
   end
 end
-

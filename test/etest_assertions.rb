@@ -1,3 +1,14 @@
+module Etest::ComparisonAssertions::Etest
+  # I don't know how to test asserts. This, at least, give (fake) C0 coverage
+  def test_comparision_assertions
+    assert_lt 1, 2
+    assert_le 1, 1
+    assert_ge 2, 2
+    assert_gt 2, 1
+    assert_eq 2, 2
+    assert_ne 1, 2
+  end
+end
 
 module Etest::Assertions::Etest
   #

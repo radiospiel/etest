@@ -63,10 +63,10 @@ module Etest
   end
 
   def self.run(*etests)
-    dlog "Running", etests
     #
     # convert all Etest modules into a test case
     test_cases = etests.map { |etest|
+      dlog "Running", etest
       to_test_case etest
     }
     
