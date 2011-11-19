@@ -39,6 +39,9 @@ class MiniTest::Unit::TestCase
       MiniTest::Unit::TestCase.inherited test_case
     end
 
+    # reset the default test runner :)
+    MiniTest::Unit.runner.send(:initialize)
+
     MiniTest::Unit.new.run(ARGV.dup)
   ensure
     @@test_suites = outside_etests
@@ -65,7 +68,7 @@ module Etest
       Module.by_name "#{mod.name}::Etest"
     }.compact.uniq.sort_by(&:name)
 
-    run *etests
+    run(*etests)
   end
 
   def self.run(*etests)
@@ -76,7 +79,7 @@ module Etest
       to_test_case etest
     }
     
-    MiniTest::Unit::TestCase.run_etests *test_cases
+    MiniTest::Unit::TestCase.run_etests(*test_cases)
   end
 
   #
