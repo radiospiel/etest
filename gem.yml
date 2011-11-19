@@ -1,4 +1,4 @@
-version: "0.6.0"
+version: "0.6.1"
 description: Embedded testing
 summary: Embedded testing
 # url: http://github.com/pboy/etest  
@@ -9,6 +9,9 @@ email: eno-pboy@open-lab.org
 #   - "**/.*"
 dependencies:
   - dlog
+  - minitest-rg
+  - minitest
+
 #   - nokogiri
 #   - htmlentities
 #   - rdiscount
