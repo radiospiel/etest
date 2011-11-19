@@ -34,7 +34,13 @@ module Gem
           
           log attr, v
           
-          s.send attr + "=", v
+          if attr == "dependencies"
+            v.each do |dependency|
+              s.add_dependency dependency
+            end
+          else
+            s.send "#{attr}=", v
+          end
         end
         
         %w(pre_uninstall post_install).each do |hook|
@@ -57,11 +63,7 @@ module Gem
     end
     
     def dependencies
-      return nil unless @conf["dependencies"]
-
-      @conf["dependencies"].map do |d|
-        Gem::Dependency.new d, ">= 0"
-      end
+      @conf["dependencies"]
     end
     
     def head(file)

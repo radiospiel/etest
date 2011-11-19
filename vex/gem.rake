@@ -12,8 +12,8 @@ namespace :gem do
   task :spec do
     File.open ".gemspec", "w" do |file|
       file.write <<-TXT
-      require "vex/gem"
-      Gem.spec File.dirname(__FILE__)
+require "vex/gem"
+Gem.spec File.dirname(__FILE__)
 TXT
     end
   end
